@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShinnLine 星射线 - 跳舞的线饭制版</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 字体图标 -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 自定义配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6C5CE7',
+            secondary: '#00CEFF',
+            dark: '#1A1A2E',
+            light: '#E2E8F0',
+            accent: '#FF2E63'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+
+  <!-- 自定义样式 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      /* 亚克力材质材质核心效果 */
+      .acrylic {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      }
+
+      .acrylic-dark {
+        background: rgba(26, 26, 46, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+      }
+
+      /* 星空背景动画 */
+      .stars {
+        background: 
+          radial-gradient(2px 2px at 20px 30px, #ffffff10, transparent),
+          radial-gradient(2px 2px at 40px 70px, #ffffff10, transparent),
+          radial-gradient(2px 2px at 50px 160px, #ffffff10, transparent),
+          radial-gradient(2px 2px at 90px 40px, #ffffff10, transparent),
+          radial-gradient(2px 2px at 130px 80px, #ffffff10, transparent),
+          radial-gradient(2px 2px at 160px 120px, #ffffff10, transparent);
+        background-repeat: repeat;
+        background-size: 200px 200px;
+        animation: stars 20s linear infinite;
+      }
+
+      @keyframes stars {
+        from { background-position: 0 0; }
+        to { background-position: 200px 200px; }
+      }
+
+      /* 动态线条装饰 */
+      .line-animation {
+        position: absolute;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(108,92,231,0) 0%, rgba(108,92,231,1) 50%, rgba(108,92,231,0) 100%);
+        animation: lineMove 8s linear infinite;
+      }
+
+      @keyframes lineMove {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(100vw); }
+      }
+
+      /* 滚动渐显效果 */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: 
+          opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-dark text-light min-h-screen overflow-x-hidden relative">
+  <!-- 背景层：星空 + 动态线条 -->
+  <div class="fixed inset-0 stars opacity-30 z-0"></div>
+  <div class="line-animation top-[20%] w-64" style="animation-delay: 0s;"></div>
+  <div class="line-animation top-[40%] w-96" style="animation-delay: 2s; background: linear-gradient(90deg, rgba(0,206,255,0) 0%, rgba(0,206,255,1) 50%, rgba(0,206,255,0) 100%);"></div>
+  <div class="line-animation top-[60%] w-80" style="animation-delay: 4s; background: linear-gradient(90deg, rgba(255,46,99,0) 0%, rgba(255,46,99,1) 50%, rgba(255,46,99,0) 100%);"></div>
+  <div class="line-animation top-[80%] w-72" style="animation-delay: 6s;"></div>
+
+   <!-- 导航栏 -->
+  <nav class="acrylic-dark fixed w-full z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- Logo 区域 -->
+      <div class="flex items-center space-x-2">
+        <img 
+          src="image\Logo.png" 
+          alt="ShinnLine Logo" 
+          class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover"
+        >
+        <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">ShinnLine</h1>
+      </div>
+
+      <!-- 导航链接 -->
+      <div class="hidden md:flex space-x-8">
+        <a href="#about" class="hover:text-primary transition-colors">关于游戏</a>
+        <a href="#screenshots" class="hover:text-primary transition-colors">游戏截图</a>
+        <a href="#videos" class="hover:text-primary transition-colors">游戏视频</a>
+        <a href="#download" class="hover:text-primary transition-colors">下载链接</a>
+      </div>
+
+      <!-- 移动端菜单按钮 -->
+      <button class="md:hidden text-2xl">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 英雄横幅 -->
+  <header class="relative min-h-screen flex items-center justify-center pt-16 z-10">
+    <div class="container mx-auto px-4 text-center">
+      <div class="acrylic rounded-2xl p-8 md:p-12 max-w-4xl mx-auto transform transition-all duration-500 hover:scale-[1.02]">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+          星射线<br>ShinnLine
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 text-light/80">
+          跳舞的线饭制版 - 跟随音乐的节奏，穿越梦幻般的世界
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="#download" class="acrylic bg-gradient-to-r from-primary to-secondary text-white font-medium py-3 px-8 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">
+            <i class="fa fa-download mr-2"></i>立即下载
+          </a>
+          <a href="#about" class="acrylic text-light font-medium py-3 px-8 rounded-full hover:shadow-lg hover:shadow-primary/10 transition-all">
+            <i class="fa fa-info-circle mr-2"></i>了解更多
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 关于游戏 -->
+  <section id="about" class="py-20 relative z-10">
+    <div class="container mx-auto px-4">
+      <div class="acrylic-dark rounded-2xl p-8 max-w-5xl mx-auto fade-in">
+        <h2 class="text-3xl font-bold mb-6 flex items-center">
+          <span class="w-10 h-1 bg-primary mr-3"></span>关于星射线
+        </h2>
+        <div class="prose md:prose-lg text-light/80">
+          <p>《星射线》(ShinnLine) 是一款基于《跳舞的线》(Dancing Line) 制作的饭制版游戏，保留了原作核心玩法的同时，加入了全新的关卡设计、音乐和视觉效果。</p>
+          <p>游戏中，玩家将控制一条不断延伸的线，跟随音乐的节奏在各种梦幻场景中穿梭，躲避障碍物，到达终点。每个关卡都有独特的主题和音乐，带来沉浸式的游戏体验。</p>
+        </div>
+        <!-- 功能卡片矩阵 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <div class="acrylic p-4 rounded-lg flex flex-col justify-center">
+            <i class="fa fa-music text-primary text-xl mb-2"></i>
+            <h3 class="font-semibold">优美音乐</h3>
+            <p class="text-xs text-light/70">专心挑选优质好音乐</p>
+          </div>
+          <div class="acrylic p-4 rounded-lg flex flex-col justify-center">
+            <i class="fa fa-paint-brush text-secondary text-xl mb-2"></i>
+            <h3 class="font-semibold">精美场景</h3>
+            <p class="text-xs text-light/70">精心设计的视觉世界</p>
+          </div>
+          <div class="acrylic p-4 rounded-lg flex flex-col justify-center">
+            <i class="fa fa-gamepad text-accent text-xl mb-2"></i>
+            <h3 class="font-semibold">创新关卡</h3>
+            <p class="text-xs text-light/70">富有挑战性的关卡设计</p>
+          </div>
+          <div class="acrylic p-4 rounded-lg flex flex-col justify-center">
+            <i class="fa fa-users text-primary text-xl mb-2"></i>
+            <h3 class="font-semibold">社区支持</h3>
+            <p class="text-xs text-light/70">活跃的玩家社区</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 游戏截图（彻底解决黑边问题） -->
+  <section id="screenshots" class="py-20 relative z-10">
+    <div class="container mx-auto px-4">
+      <div class="acrylic-dark rounded-2xl p-8 max-w-6xl mx-auto fade-in">
+        <h2 class="text-3xl font-bold mb-8 flex items-center">
+          <span class="w-10 h-1 bg-secondary mr-3"></span>游戏截图
+        </h2>
+        
+        <!-- 截图网格 - 强制图片铺满容器 -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <!-- 截图1 -->
+          <div class="group relative rounded-xl overflow-hidden acrylic h-64">
+            <img 
+              src="image\The_Origin_1.jpg" 
+              alt="游戏截图1 - 启程关卡" 
+              class="absolute inset-0 w-full h-full object-cover"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+              <p class="text-sm">关卡：启程</p>
+            </div>
+          </div>
+          
+          <!-- 截图2 -->
+          <div class="group relative rounded-xl overflow-hidden acrylic h-64">
+            <img 
+              src="image/The_Origin_2.jpg" 
+              alt="游戏截图2 - 启程关卡" 
+              class="absolute inset-0 w-full h-full object-cover"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+              <p class="text-sm">关卡：启程</p>
+            </div>
+          </div>
+          
+          <!-- 截图3 -->
+          <div class="group relative rounded-xl overflow-hidden acrylic h-64">
+            <img 
+              src="image\The_Origin_3.jpg" 
+              alt="游戏截图3 - 启程关卡" 
+              class="absolute inset-0 w-full h-full object-cover"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+              <p class="text-sm">关卡：启程</p>
+            </div>
+          </div>
+         
+          <!-- 截图4 -->
+          <div class="group relative rounded-xl overflow-hidden acrylic h-64">
+            <img 
+              src="image\The_Loss.png" 
+              alt="游戏截图1 - The Loss关卡" 
+              class="absolute inset-0 w-full h-full object-cover"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+              <p class="text-sm">关卡：遗落</p>
+            </div>
+          </div>
+         
+          <!-- 截图5 -->
+          <div class="group relative rounded-xl overflow-hidden acrylic h-64">
+            <img 
+              src="image\The_Winter.png" 
+              alt="游戏截图1 - The Winter关卡" 
+              class="absolute inset-0 w-full h-full object-cover"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+              <p class="text-sm">关卡：寒冬之凝</p>
+            </div>
+          </div>
+
+          </section>
+
+  <!-- 游戏视频（强制16:9比例） -->
+  <section id="videos" class="py-20 relative z-10">
+    <div class="container mx-auto px-4">
+      <div class="acrylic-dark rounded-2xl p-8 max-w-5xl mx-auto fade-in">
+        <h2 class="text-3xl font-bold mb-6 flex items-center">
+          <span class="w-10 h-1 bg-accent mr-3"></span>游戏视频
+        </h2>
+        
+        <!-- 主视频 - 强制16:9比例 -->
+        <div class="relative w-full rounded-xl overflow-hidden acrylic" style="padding-top: 56.25%;">
+          <iframe 
+            src="https://player.bilibili.com/player.html?isOutside=true&aid=115083631927081&bvid=BV1aYeEzGER9&cid=31914787928&p=1" 
+            scrolling="no" 
+            border="0" 
+            frameborder="no" 
+            framespacing="0" 
+            allowfullscreen="true"
+            class="absolute top-0 left-0 w-full h-full"
+          ></iframe>
+        </div>
+        
+        <!-- 视频分类 -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="acrylic p-6 rounded-xl hover:shadow-lg hover:shadow-primary/10 transition-all">
+            <h3 class="text-xl font-semibold mb-3 flex items-center">
+              <i class="fa fa-play-circle text-primary mr-2"></i>关卡演示
+            </h3>
+            <p class="text-light/80">观看完整的关卡通关演示，感受游戏的节奏与美感。每个关卡都有独特的设计和音乐，带来不一样的体验。</p>
+          </div>
+          
+          <div class="acrylic p-6 rounded-xl hover:shadow-lg hover:shadow-secondary/10 transition-all">
+            <h3 class="text-xl font-semibold mb-3 flex items-center">
+              <i class="fa fa-code text-secondary mr-2"></i>开发日志
+            </h3>
+            <p class="text-light/80">关注我们的开发进度，了解新关卡、新功能的制作过程。开发者将分享创作灵感和技术细节。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下载链接 -->
+  <section id="download" class="py-20 relative z-10">
+    <div class="container mx-auto px-4">
+      <div class="acrylic-dark rounded-2xl p-8 max-w-4xl mx-auto fade-in">
+        <h2 class="text-3xl font-bold mb-8 flex items-center">
+          <span class="w-10 h-1 bg-primary mr-3"></span>下载与链接
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 下载链接 -->
+          <a href="https://qm.qq.com/q/EhOZAhoUp4" target="_blank" class="acrylic rounded-xl p-6 flex items-center group hover:translate-x-2 transition-transform">
+            <div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-2xl text-primary mr-4 group-hover:bg-primary/30 transition-colors">
+              <i class="fa fa-download"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold">游戏下载</h3>
+              <p class="text-light/70">加入QQ群获取最新版本</p>
+            </div>
+          </a>
+          
+          <!-- B站链接 -->
+          <a href="https://space.bilibili.com/388157727" target="_blank" class="acrylic rounded-xl p-6 flex items-center group hover:translate-x-2 transition-transform">
+            <div class="w-14 h-14 rounded-full bg-[#FB7299]/20 flex items-center justify-center text-2xl text-[#FB7299] mr-4 group-hover:bg-[#FB7299]/30 transition-colors">
+              <i class="fa fa-play-circle"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold">B站主页</h3>
+              <p class="text-light/70">关注我们的B站账号</p>
+            </div>
+          </a>
+          
+          <!-- 网易云音乐 -->
+          <a href="https://shinnline.pages.dev/" target="_blank" class="acrylic rounded-xl p-6 flex items-center group hover:translate-x-2 transition-transform">
+            <div class="w-14 h-14 rounded-full bg-[#C62F2F]/20 flex items-center justify-center text-2xl text-[#C62F2F] mr-4 group-hover:bg-[#C62F2F]/30 transition-colors">
+              <i class="fa fa-music"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold">原版饭制OST</h3>
+              <p class="text-light/70">收听游戏原声音乐</p>
+            </div>
+          </a>
+          
+          <!-- QQ官方Godot饭制频道 -->
+          <a href="https://pd.qq.com/s/d8tm0oecy" target="_blank" class="acrylic rounded-xl p-6 flex items-center group hover:translate-x-2 transition-transform">
+            <div class="w-14 h-14 rounded-full bg-[#12B7F5]/20 flex items-center justify-center text-2xl text-[#12B7F5] mr-4 group-hover:bg-[#12B7F5]/30 transition-colors">
+              <i class="fa fa-users"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold">QQ官方Godot饭制频道</h3>
+              <p class="text-light/70">加入频道讨论交流</p>
+            </div>
+          </a>
+        </div>
+        
+        <div class="mt-10 acrylic p-6 rounded-xl border border-accent/30 bg-accent/5">
+          <h3 class="text-xl font-semibold mb-2 flex items-center">
+            <i class="fa fa-info-circle text-accent mr-2"></i>注意事项
+          </h3>
+          <p class="text-light/80 mb-2">1. 本游戏为《跳舞的线》饭制版，非官方版本，仅供学习交流使用</p>
+          <p class="text-light/80">2. 如有任何问题或建议，请加入QQ群反馈</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="py-10 acrylic-dark relative z-10">
+    <div class="container mx-auto px-4 text-center">
+      <div class="flex justify-center items-center space-x-2 mb-4">
+        <img 
+          src="image\Logo.png" 
+          alt="ShinnLine Logo" 
+          class="w-6 h-6 rounded-full object-cover"
+        >
+        <h2 class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">ShinnLine 星射线</h2>
+      </div>
+      <p class="text-light/60 text-sm mb-6">© 2025 ShinnLine 星射线 开发团队. 保留所有权利.</p>
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="https://space.bilibili.com/388157727" target="_blank" class="text-light/60 hover:text-primary transition-colors">
+          <i class="fa fa-play-circle text-xl"></i>
+        </a>
+        <a href="https://qm.qq.com/q/EhOZAhoUp4" target="_blank" class="text-light/60 hover:text-[#12B7F5] transition-colors">
+          <i class="fa fa-qq text-xl"></i>
+        </a>
+        <a href="https://music.163.com/djradio?id=1227926643&uct2=U2FsdGVkX18y4soXavVS3tlEXEtb1GLSWAYFALzJO30=" target="_blank" class="text-light/60 hover:text-[#C62F2F] transition-colors">
+          <i class="fa fa-music text-xl"></i>
+        </a>
+      </div>
+      <p class="text-light/40 text-xs">本游戏仅作学习交流使用，非商业用途。如有侵权，请联系删除。</p>
+    </div>
+  </footer>
+
+  <script>
+    // 滚动渐显效果
+    document.addEventListener('DOMContentLoaded', function() {
+      const fadeElements = document.querySelectorAll('.fade-in');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElements.forEach(element => {
+        observer.observe(element);
+      });
+      
+      // 导航栏滚动效果
+      const nav = document.querySelector('nav');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          nav.classList.add('py-2');
+          nav.classList.remove('py-3');
+        } else {
+          nav.classList.add('py-3');
+          nav.classList.remove('py-2');
+        }
+      });
+      
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
